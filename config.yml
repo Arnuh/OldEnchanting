@@ -1,0 +1,11 @@
+# If enabled the lapis cost will be removed.
+lapis: true
+
+# If enabled the possible enchants will be hidden.
+hideEnchant: true
+
+# If enabled the enchantment costs will use the old system.
+oldEnchantCosts: true
+
+# If enabled each time the player puts an item in the enchant table the possible enchants get randomized.
+randomizeEnchants: true
