@@ -41,7 +41,7 @@ public class PrepareItemEnchant_1_9_R1 implements PrepareItemEnchant{
 		int base = (int) ((rand.nextInt(8) + 1) + rand.nextInt((int) Math.floor(books / 2)) + rand.nextInt(books));// Randomize the enchant costs
 		table.costs[0] = Math.max(base / 3, 1);
 		table.costs[1] = (base * 2) / 3 + 1;
-		table.costs[2] = ThreadLocalRandom.current().nextInt(base, books * 2);// Before v1.1
+		table.costs[2] = ThreadLocalRandom.current().nextInt(base, books * 2) + 1;// Before v1.1
 		// table.costs[2] = Math.max(base, books * 2);//Idk what version
 	}
 
