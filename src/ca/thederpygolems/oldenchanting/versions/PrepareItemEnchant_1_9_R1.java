@@ -38,7 +38,7 @@ public class PrepareItemEnchant_1_9_R1 implements PrepareItemEnchant{
 		ContainerEnchantTable table = (ContainerEnchantTable) view.getHandle();
 		int books = e.getEnchantmentBonus() > 15 ? 15 : e.getEnchantmentBonus();// Books
 		// int base = (int) ((rand.nextInt(8) + 1) + Math.floor(books / 2) + rand.nextInt(books));//Before v1.3
-		int base = (int) ((rand.nextInt(8) + 1) + rand.nextInt((int) Math.floor(books / 2)) + rand.nextInt(books));// Randomize the enchant costs
+		int base = (int) ((rand.nextInt(8) + 1) + (books > 0 ? rand.nextInt((int) Math.floor(books / 2)) + rand.nextInt(books) : 0));// Randomize the enchant costs
 		table.costs[0] = Math.max(base / 3, 1);
 		table.costs[1] = (base * 2) / 3 + 1;
 		table.costs[2] = ThreadLocalRandom.current().nextInt(base, books * 2) + 1;// Before v1.1
