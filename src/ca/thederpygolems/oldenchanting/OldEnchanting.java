@@ -1,5 +1,7 @@
 package ca.thederpygolems.oldenchanting;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,8 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ca.thederpygolems.oldenchanting.versions.PrepareItemEnchant;
-import ca.thederpygolems.oldenchanting.versions.PrepareItemEnchant_1_8_R3;
-import ca.thederpygolems.oldenchanting.versions.PrepareItemEnchant_1_9_R1;
 
 public class OldEnchanting extends JavaPlugin implements Listener, CommandExecutor{
 
@@ -36,18 +36,19 @@ public class OldEnchanting extends JavaPlugin implements Listener, CommandExecut
             version = getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
 		}catch(ArrayIndexOutOfBoundsException ex){}
 		if(!setupVersionInterface()){
-			getLogger().severe("Failed to setup OldEnchanting for version: " + version + ". Please report this asap");
+			getLogger().severe("Failed to setup OldEnchanting for version: " + version + ". Please report this.");
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
 	}
 
 	public boolean setupVersionInterface(){
 		if(version == null) return false;
-		if(version.equals("v1_8_R3")){
-			event = new PrepareItemEnchant_1_8_R3(this);
-		}else if(version.equals("v1_9_R1")){
-			event = new PrepareItemEnchant_1_9_R1(this);
-        }
+		try{
+			Class<?> clazz = Class.forName("ca.thederpygolems.oldenchanting.versions.PrepareItemEnchant" + version.replace("v", "_"));
+			event = (PrepareItemEnchant) clazz.getConstructor(OldEnchanting.class).newInstance(this);
+		}catch(ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e){
+			return false;
+		}
 		return event != null;
 	}
 

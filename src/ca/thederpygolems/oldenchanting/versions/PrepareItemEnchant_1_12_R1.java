@@ -2,25 +2,24 @@ package ca.thederpygolems.oldenchanting.versions;
 
 import java.util.Random;
 
-import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventoryView;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 
 import ca.thederpygolems.oldenchanting.OldEnchanting;
-import net.minecraft.server.v1_9_R1.ContainerEnchantTable;
+import net.minecraft.server.v1_12_R1.ContainerEnchantTable;
 
 /**
  * @Author Borlea
  * @Github https://github.com/borlea/
  * @Website http://codingforcookies.com/
- * @since Mar 1, 2016
+ * @since May 24, 2017
  */
-public class PrepareItemEnchant_1_9_R1 implements PrepareItemEnchant{
+public class PrepareItemEnchant_1_12_R1 implements PrepareItemEnchant{
 
 	private Random rand = new Random();
-
 	private final OldEnchanting plugin;
 
-	public PrepareItemEnchant_1_9_R1(OldEnchanting plugin){
+	public PrepareItemEnchant_1_12_R1(OldEnchanting plugin){
 		this.plugin = plugin;
 	}
 
