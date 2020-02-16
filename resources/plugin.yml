@@ -1,7 +1,7 @@
 name: OldEnchanting
 main: ca.thederpygolems.oldenchanting.OldEnchanting
 author: TheDerpyGolems
-version: 1.0.1
+version: 1.0.2
 commands:
-    oldenchanting:
-        description: Reload the OldEnchanting config
+  oldenchanting:
+    description: Reload the OldEnchanting config

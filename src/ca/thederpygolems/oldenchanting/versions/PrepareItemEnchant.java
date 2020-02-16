@@ -5,9 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 
 /**
- * @Author Borlea
- * @Github https://github.com/borlea/
- * @Website http://codingforcookies.com/
+ * @author Arnah
  * @since Nov 27, 2015
  */
 public interface PrepareItemEnchant{
@@ -22,7 +20,7 @@ public interface PrepareItemEnchant{
 	
 	default void generateNewCosts(int[] costs, Random rand, int books){
 		// int base = (int) ((rand.nextInt(8) + 1) + Math.floor(books / 2) + rand.nextInt(books));//Before v1.3
-		int base = (int) ((rand.nextInt(8) + 1) + (books > 0 ? rand.nextInt((int) Math.floor(books / 2D)) + rand.nextInt(books) : 0));// Randomize the enchant costs
+		int base = ((rand.nextInt(8) + 1) + (books > 0 ? rand.nextInt((int) Math.floor(books / 2D)) + rand.nextInt(books) : 0));// Randomize the enchant costs
 		costs[0] = Math.max(base / 3, 1);
 		costs[1] = (base * 2) / 3 + 1;
 		int first = Math.min(base, books * 2);

@@ -1,5 +1,6 @@
 package ca.thederpygolems.oldenchanting;
 
+import java.util.Random;
 import ca.thederpygolems.oldenchanting.versions.PrepareItemEnchant;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,11 +19,19 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * @author Arnah
+ * @since Nov 27, 2015
+ */
 public class OldEnchanting extends JavaPlugin implements Listener, CommandExecutor{
+	
+	private final Random rand = new Random();
 	
 	private boolean lapis, hideEnchant, oldEnchantCosts, randomizeEnchants;
 	private PrepareItemEnchant event;
-	String version;
+	private String version;
+	private float versionVal;
+	private Class<?> craftInventoryView;
 	
 	public void onEnable(){
 		saveDefaultConfig();
@@ -31,6 +40,7 @@ public class OldEnchanting extends JavaPlugin implements Listener, CommandExecut
 		load(false);
 		try{
 			version = getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+			versionVal = Float.parseFloat(version.substring(1, 5).replace("_", "."));
 		}catch(ArrayIndexOutOfBoundsException ignored){
 		}
 		if(!setupVersionInterface()){
@@ -42,11 +52,27 @@ public class OldEnchanting extends JavaPlugin implements Listener, CommandExecut
 	public boolean setupVersionInterface(){
 		if(version == null) return false;
 		try{
+			craftInventoryView = Class.forName("org.bukkit.craftbukkit." + version + ".inventory.CraftInventoryView");
+		}catch(Exception ex){
+			return false;
+		}
+		try{
 			Class<?> clazz = Class.forName("ca.thederpygolems.oldenchanting.versions.PrepareItemEnchant" + version.replace("v", "_"));
 			event = (PrepareItemEnchant) clazz.getConstructor(OldEnchanting.class).newInstance(this);
 			return true;
 		}catch(Exception e){
-			return false;
+			try{
+				Class<?> clazz;
+				if(versionVal <= 1.10){
+					clazz = Class.forName("ca.thederpygolems.oldenchanting.versions.PrepareItemEnchant_Fallback_Old");
+				}else{
+					clazz = Class.forName("ca.thederpygolems.oldenchanting.versions.PrepareItemEnchant_Fallback");
+				}
+				event = (PrepareItemEnchant) clazz.getConstructor(OldEnchanting.class).newInstance(this);
+				return true;
+			}catch(Exception ex){
+				return false;
+			}
 		}
 	}
 	
@@ -94,13 +120,12 @@ public class OldEnchanting extends JavaPlugin implements Listener, CommandExecut
 	}
 	
 	public boolean onCommand(CommandSender sender, Command arg1, String label, String[] args){
-		if(args.length > 0){
-			if(args[0].equalsIgnoreCase("reload")){
-				load(true);
-				sender.sendMessage(ChatColor.GREEN + "OldEnchanting config reloaded.");
-			}
+		if(args == null || args.length <= 0) return false;
+		if(args[0].equalsIgnoreCase("reload")){
+			load(true);
+			sender.sendMessage(ChatColor.GREEN + "OldEnchanting config reloaded.");
 		}
-		return false;
+		return true;
 	}
 	
 	public void load(boolean reload){
@@ -109,5 +134,13 @@ public class OldEnchanting extends JavaPlugin implements Listener, CommandExecut
 		hideEnchant = getConfig().getBoolean("hideEnchant");
 		oldEnchantCosts = getConfig().getBoolean("oldEnchantCosts");
 		randomizeEnchants = getConfig().getBoolean("randomizeEnchants");
+	}
+	
+	public Random getRand(){
+		return rand;
+	}
+	
+	public Class<?> getCraftInventoryView(){
+		return craftInventoryView;
 	}
 }
